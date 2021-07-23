@@ -22,10 +22,15 @@ function App() {
     
     if(typeof(sessionId) === 'undefined' || sessionId == null)  
     {
+      console.log('generating a new id');
       const newUserSession = await getData('usersession/');
-       setUserSession(newUserSession);
-       console.log(newUserSession);
-       localStorage.setItem('SessionId', newUserSession.userSessionId);
+      setUserSession(newUserSession);
+      console.log(newUserSession);
+      localStorage.setItem('SessionId', newUserSession.userSessionId);
+    } else 
+    {
+      const currentUserSession = await getData(`usersession/${sessionId}`);
+      setUserSession(currentUserSession);
     }
     
     setUserSessionId(sessionId);
@@ -41,10 +46,6 @@ function App() {
     }
 
     getSessionId();
-
-    
-    const sessionData = getData(`usersession/${userSessionId}`);
-    console.log(sessionData);
   }, []);
 
   const getData = async (resource = '') => {
@@ -83,7 +84,7 @@ function App() {
       },
 
     
-      body: JSON.stringify({'usersessionid' : userSessionId, ...data})
+      body: JSON.stringify({'usersessionid' : userSession.userSessionId, ...data})
     });
 
     //setTasks(questions.map((task) => task.id === id ? { ...task, reminder: !task.reminder } : task))
@@ -110,7 +111,7 @@ function App() {
         <Header />
         <Questions questions={poll.questions} onDelete={deleteTask} />
         <Route path='/' exact render={(props) => (
-          <Main description={userSession.description} onPollDescriptionChange={putData} />
+          <Main publicsessionid={userSession.publicSessionId} description={userSession.description} onPollDescriptionChange={putData} />
 
         )} />
         
