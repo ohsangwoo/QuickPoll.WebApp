@@ -3,19 +3,21 @@ import {useState} from "react";
 
 const joinLink = `${window.location}join/${localStorage.getItem('SessionId')}`;
 
-const Main = ({onPollDescriptionChange}) => {
-    const [pollDescription, setPollDescription] = useState('');
+const Main = ({description, onPollDescriptionChange}) => {
+    const [pollDescription, setPollDescription] = useState(description);
     
-    const postData = () => {
-        console.log(pollDescription)
-        
+    const updateDescription = (e) => {
+
+        const description = e.currentTarget.value;
+        onPollDescriptionChange('usersession', {'description': description} );
+        setPollDescription(description);
     }
 
     return (
         <div className='main'>        
             <div className='form-control'>
                 <label><h4>Description</h4></label>
-                <input type='text' value={pollDescription} placeholder='Please describe about the poll session here' onChange={(e) => setPollDescription(e.currentTarget.value)} onBlur={postData} />
+                <input type='text' value={pollDescription} placeholder='Please describe about the poll session here' onChange={(e) => setPollDescription(e.currentTarget.value)} onBlur={updateDescription} />
             </div>
 
             <div className='joinLinks'>

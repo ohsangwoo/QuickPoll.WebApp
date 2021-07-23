@@ -4,52 +4,53 @@ import Header from './components/Header'
 import Main from './components/Main'
 import Footer from './components/Footer'
 import Questions from './components/Questions'
-import AddTask from './components/AddTask'
 import About from './components/About'
-import { FaSave } from 'react-icons/fa'
 
-const apiServerUri = 'http://localhost:5000/api'
+
+// const apiServerUri = 'https://quickpollapi.azurewebsites.net/api'
+const apiServerUri = 'https://localhost:44385/api'
 
 function App() {
   const [poll, setPoll] = useState([])
-  //const [pollSessionId, setPollSessionId] = useState([]
-  const getSessionId = () => {
-    const getNewId = () => {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
+  const [userSession, setUserSession] = useState({});
+  const [userSessionId, setUserSessionId] = useState('')
+
+  const getSessionId = async () => {
+
 
     var sessionId = localStorage.getItem('SessionId');
-    if(sessionId == null) 
+    
+    if(typeof(sessionId) === 'undefined' || sessionId == null)  
     {
-       sessionId = getNewId();
-       localStorage.setItem('SessionId', sessionId);
-
+      const newUserSession = await getData('usersession/');
+       setUserSession(newUserSession);
+       console.log(newUserSession);
+       localStorage.setItem('SessionId', newUserSession.userSessionId);
     }
-
-    return sessionId;
+    
+    setUserSessionId(sessionId);
   }
 
   
   
   useEffect(() => {
-    const getTasks = async () => {
-      const sessionId = getSessionId();
-    
-      const tasksFromServer = await getData('');
-      console.log(tasksFromServer);
-      setPoll(tasksFromServer);
+    const getTasks = async () => {   
+      // const pollData = await getData();
+      // console.log(pollData);
+      // setPoll(pollData);
     }
 
-    getTasks();
+    getSessionId();
+
+    
+    const sessionData = getData(`usersession/${userSessionId}`);
+    console.log(sessionData);
   }, []);
 
-  const getData = async (resource) => {
-    const res = await fetch(`${apiServerUri}/${getSessionId()}/${resource}`);
+  const getData = async (resource = '') => {
+    const res = await fetch(`${apiServerUri}/${resource}`);
     const data = await res.json();
-
+    console.log(data);
     return data;
   }
 
@@ -70,19 +71,19 @@ function App() {
   }
 
   //Toggle Reminder
-  const toggleReminder = async (id) => {
-    console.log(id)
+  const putData = async (resource, data) => {
 
-    const task = await fetchTask(id);
-
-    task.reminder = !task.reminder;
-
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+    
+    console.log(data);
+ 
+    const res = await fetch(`${apiServerUri}/${resource}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify(task)
+
+    
+      body: JSON.stringify({'usersessionid' : userSessionId, ...data})
     });
 
     //setTasks(questions.map((task) => task.id === id ? { ...task, reminder: !task.reminder } : task))
@@ -107,9 +108,9 @@ function App() {
     <Router>
       <div className="container">
         <Header />
-        <Questions questions={poll.questions} onDelete={deleteTask} onToggle={toggleReminder} />
+        <Questions questions={poll.questions} onDelete={deleteTask} />
         <Route path='/' exact render={(props) => (
-          <Main onPollDescriptionChange={postData} />
+          <Main description={userSession.description} onPollDescriptionChange={putData} />
 
         )} />
         
