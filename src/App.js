@@ -5,10 +5,11 @@ import Main from './components/Main'
 import Footer from './components/Footer'
 import Questions from './components/Questions'
 import About from './components/About'
+import NewQuestion from './components/NewQuestion'
 
 
-// const apiServerUri = 'https://quickpollapi.azurewebsites.net/api'
-const apiServerUri = 'https://localhost:44385/api'
+const apiServerUri = 'https://quickpollapi.azurewebsites.net/api'
+// const apiServerUri = 'https://localhost:44385/api'
 
 function App() {
   const [poll, setPoll] = useState([])
@@ -125,6 +126,7 @@ function App() {
           </>
         )} /> */}
         <Route path='/about' component={About} />
+        <Route path='/newquestion' component={NewQuestion} />
         <Footer />
       </div>
     </Router>

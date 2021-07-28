@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
-import Button from './Button'
 import { FaPollH } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 export const Header = ({title}) => {
     return (
         <header className='header'>
-            <h1><FaPollH /> {title}</h1>
+            <Link className='linkTo' to="/"><h1><FaPollH /> {title}</h1></Link>
         </header>
     )
 }
@@ -18,10 +18,5 @@ Header.defaultProps = {
 Header.propTypes = {
     title: PropTypes.string.isRequired,
 }
-
-
-// const headingStyle = {
-//     color: 'red', backgroundColor: 'black',
-// }
 
 export default Header

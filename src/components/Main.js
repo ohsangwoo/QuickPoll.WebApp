@@ -30,7 +30,7 @@ const Main = ({publicsessionid, description: initialDescription, onPollDescripti
             </div>
 
             <div className='joinLinks'>
-            <div className='item'><h4>Please scan the QR code or type the URL in a web browser.</h4></div>
+            <div className='item'><h4>Please scan the QR code or type the URL in a web browser to join the session</h4></div>
             <div className='item'><QRCode value={joinLink} /></div>
             <div className='item'><a href={joinLink} target='_blank' rel="noreferrer" >{joinLink}</a></div>
             </div>

@@ -26,6 +26,8 @@ body {
   border: 1px solid steelblue;
   padding: 30px;
   border-radius: 5px;
+  overflow-y: hidden;
+  overflow-x: hidden; 
 }
 
 .header {
@@ -138,4 +140,28 @@ footer {
 
 .joinLinks .item {
   padding: 10px;
+}
+
+a.linkTo {
+  color: black;
+  text-decoration: none; /* no underline */
+}
+
+.cardItem {
+  width: 11vw;
+  height: 20vh;
+  border-radius: 5px;
+  border: 2px solid blue;
+  margin-right: 1vw;
+  margin-bottom: 1vw;
+  text-align: center;
+}
+
+.cardsContainer 
+{
+  display: flex;
+  overflow: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
